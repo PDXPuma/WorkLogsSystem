@@ -85,8 +85,16 @@ Entries are appended to: `~/WorkLogs/worklogs/<TICKET>.md`.
 - Before gathering daily logs, to ensure all work is captured
 - After switching branches, to document what was done on each
 
+## Important: Append Only
+
+- **Never overwrite or delete** existing content in the worklog file
+- **Never remove** manually added notes or entries
+- Only **append** new entries for commits not already present
+- Check for existing entries by timestamp (e.g., `## [YYYY-MM-DD HH:MM]`) to avoid duplicates
+- If the file doesn't exist yet, create it
+- If the file exists, read it first, then append only new entries
+
 ## Notes
 
 - If the same ticket has work across multiple repos, run this skill in each repo
-- The skill should be idempotent — running it twice shouldn't create duplicate entries
 - If no commits are found for the ticket in the given date range, inform the user
