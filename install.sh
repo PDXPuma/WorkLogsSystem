@@ -60,6 +60,25 @@ mkdir -p "$HOME/WorkLogs/worklogs"
 mkdir -p "$HOME/WorkLogs/daily-logs"
 mkdir -p "$HOME/WorkLogs/summaries"
 
+# 6. Install opencode skills to ~/.config/opencode/skills/
+OPENCOD_SKILLS_DIR="$HOME/.config/opencode/skills"
+if [ -d "$SCRIPT_DIR/.opencode/skills" ]; then
+    echo "  Installing opencode skills to $OPENCOD_SKILLS_DIR..."
+    mkdir -p "$OPENCOD_SKILLS_DIR"
+    for skill_dir in "$SCRIPT_DIR/.opencode/skills"/*/; do
+        if [ -d "$skill_dir" ]; then
+            skill_name="$(basename "$skill_dir")"
+            mkdir -p "$OPENCOD_SKILLS_DIR/$skill_name"
+            for skill_file in "$skill_dir"*.md; do
+                if [ -f "$skill_file" ]; then
+                    cp "$skill_file" "$OPENCOD_SKILLS_DIR/$skill_name/"
+                    echo "    $skill_name/$(basename "$skill_file") → $OPENCOD_SKILLS_DIR/$skill_name/"
+                fi
+            done
+        fi
+    done
+fi
+
 echo ""
 echo "Installation complete!"
 echo ""
