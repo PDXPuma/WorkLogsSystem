@@ -50,11 +50,12 @@ When no ticket can be identified (by any of the above methods), **get all commit
     - Files changed (added, modified, deleted)
     - Diff summary (lines added/removed)
     - Any related branches or PRs
+    - **Actual content changes** — run `git show <hash>` or `git diff` to understand what was altered, not just which files changed
 
 3. **Synthesize a concise summary** of the work done:
     - What was accomplished
     - Key files modified
-    - Notable changes or fixes
+    - Notable changes or fixes (describe the actual code changes, not just file names)
     - Any blockers or context
 
 4. **Write entries to `~/WorkLogs/worklogs/<TICKET>.md`**:
@@ -64,6 +65,8 @@ When no ticket can be identified (by any of the above methods), **get all commit
     - Added timeout handling with 30s default, configurable via env var
     - Added unit tests for timeout scenarios
     ```
+
+    For each commit entry, describe what was actually changed in the code, not just which files were touched. Use `git show <hash>` to inspect the diff and summarize the actual alterations.
 
 ## Date Detection
 
