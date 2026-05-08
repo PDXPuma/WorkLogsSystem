@@ -5,7 +5,7 @@ Automated work logging through shell scripts and Cursor AI skills. Track Jira ti
 ## Directory Structure
 
 ```
-WorkChecklists/
+WorkLogsSystem/
 ├── worklogs/                    # Per-ticket log files (ABC-123.md, DEF-456.md, etc.) — now at ~/WorkLogs/worklogs/
 ├── daily-logs/                  # Aggregated daily logs (2026-05-08.md, etc.) — now at ~/WorkLogs/daily-logs/
 ├── summaries/                   # Weekly/monthly/quarterly summaries — now at ~/WorkLogs/summaries/
@@ -20,8 +20,10 @@ WorkChecklists/
 │   ├── repo-summarizer/         # Scan git history → write to worklog
 │   ├── summarizer/              # Summarize logs (daily/weekly/monthly/quarterly)
 │   └── querier/                 # Query logs with natural language
+├── .opencode/skills/            # OpenCode AI skills (same as above)
 ├── install.sh                   # Installer to ~/.local/bin
 ├── zsh-aliases.sh               # zsh aliases (sourced via ~/.config/worklogs/aliases.zsh)
+├── bash-aliases.sh              # bash aliases (sourced via ~/.config/worklogs/aliases.bash)
 └── README.md                    # This file
 ```
 
@@ -35,14 +37,16 @@ Run the installer:
 
 This:
 - Copies scripts to `~/.local/bin/`
-- Creates `~/.config/worklogs/aliases.zsh` with aliases
-- Adds the source line to `~/.zshrc`
+- Creates `~/.config/worklogs/aliases.zsh` with zsh aliases (`log-work`, `gather-daily`, `add-to-daily`)
+- Creates `~/.config/worklogs/aliases.bash` with bash aliases (`log`, `daily`, `note`)
+- Adds the source line to `~/.zshrc` and `~/.bashrc`
 - Creates `~/WorkLogs/worklogs/`, `~/WorkLogs/daily-logs/`, and `~/WorkLogs/summaries/` directories
+- Installs OpenCode skills to `~/.config/opencode/skills/`
 
 Then reload your shell:
 
 ```bash
-source ~/.zshrc
+source ~/.zshrc  # or source ~/.bashrc
 ```
 
 ## Daily Workflow
