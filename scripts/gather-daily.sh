@@ -42,7 +42,8 @@ for worklog in "$WORKLOG_DIR"/*.md; do
     in_section=0
     while IFS= read -r line; do
         # Check if this is a section header (## [...])
-        if [[ "$line" =~ ^##\ \[([0-9]{4}-[0-9]{2}-[0-9]{2})\ ]]; then
+        date_pattern='^## \[([0-9]{4}-[0-9]{2}-[0-9]{2})'
+        if [[ "$line" =~ $date_pattern ]]; then
             entry_date="${BASH_REMATCH[1]}"
             if [ "$entry_date" = "$GATHER_DATE" ]; then
                 in_section=1
