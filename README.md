@@ -37,8 +37,8 @@ Run the installer:
 
 This:
 - Copies scripts to `~/.local/bin/`
-- Creates `~/.config/worklogs/aliases.zsh` with zsh aliases (`log-work`, `gather-daily`, `add-to-daily`)
-- Creates `~/.config/worklogs/aliases.bash` with bash aliases (`log`, `daily`, `note`)
+- Creates `~/.config/worklogs/aliases.zsh` with zsh aliases (`log-work`, `gather-daily`, `add-to-daily`, `today`, `dl`, `wl`)
+- Creates `~/.config/worklogs/aliases.bash` with bash aliases (`log`, `daily`, `note`, `today`, `dl`, `wl`)
 - Adds the source line to `~/.zshrc` and `~/.bashrc`
 - Creates `~/WorkLogs/worklogs/`, `~/WorkLogs/daily-logs/`, and `~/WorkLogs/summaries/` directories
 - Installs OpenCode skills to `~/.config/opencode/skills/`
@@ -86,6 +86,25 @@ add-to-daily 2026-05-07 "Demo completed for DEF-456"
 ```
 
 Notes go under the "Other Notes" section of the daily log.
+
+### Browse Logs
+
+**Open today's daily log:**
+```bash
+today
+```
+
+**Browse daily logs with television:**
+```bash
+dl
+```
+
+**Browse worklogs with television:**
+```bash
+wl
+```
+
+All three open files directly in nvim. `dl` and `wl` use tv (television) to let you pick from existing files.
 
 ### Summarize
 
