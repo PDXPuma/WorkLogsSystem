@@ -11,7 +11,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INSTALL_DIR="$HOME/.local/bin"
 ALIASES_DIR="$HOME/.config/worklogs"
 ALIASES_FILE="$ALIASES_DIR/aliases.zsh"
+ALIASES_BASH_FILE="$ALIASES_DIR/aliases.bash"
 ZSHRC="$HOME/.zshrc"
+BASHRC="$HOME/.bashrc"
 
 echo "Installing Work Logging System..."
 
@@ -28,7 +30,7 @@ for script in "$SCRIPT_DIR"/scripts/*.sh; do
     echo "    $script_name → $INSTALL_DIR/$script_name"
 done
 
-# 3. Create aliases file
+# 3. Create zsh aliases file
 echo "  Creating aliases at $ALIASES_FILE..."
 cat > "$ALIASES_FILE" << 'EOF'
 # Work Logging System — zsh Aliases
@@ -45,6 +47,12 @@ alias gather-daily='~/.local/bin/gather-daily.sh'
 alias add-to-daily='~/.local/bin/add-to-daily.sh'
 EOF
 
+# 3b. Create bash aliases file
+if [ -f "$SCRIPT_DIR/bash-aliases.sh" ]; then
+    cp "$SCRIPT_DIR/bash-aliases.sh" "$ALIASES_BASH_FILE"
+    echo "  Created bash aliases at $ALIASES_BASH_FILE"
+fi
+
 # 4. Add source line to ~/.zshrc if not already present
 if ! grep -q "worklogs/aliases.zsh" "$ZSHRC" 2>/dev/null; then
     echo "" >> "$ZSHRC"
@@ -53,6 +61,18 @@ if ! grep -q "worklogs/aliases.zsh" "$ZSHRC" 2>/dev/null; then
     echo "  Added source line to $ZSHRC"
 else
     echo "  Aliases already sourced in $ZSHRC"
+fi
+
+# 4b. Add source line to ~/.bashrc if not already present
+if [ -f "$BASHRC" ]; then
+    if ! grep -q "worklogs/aliases.bash" "$BASHRC" 2>/dev/null; then
+        echo "" >> "$BASHRC"
+        echo "# Work Logging System" >> "$BASHRC"
+        echo "source ~/.config/worklogs/aliases.bash" >> "$BASHRC"
+        echo "  Added source line to $BASHRC"
+    else
+        echo "  Aliases already sourced in $BASHRC"
+    fi
 fi
 
 # 5. Create worklogs, daily-logs, and summaries directories in ~/WorkLogs
