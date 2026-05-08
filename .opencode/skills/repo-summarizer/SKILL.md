@@ -18,7 +18,7 @@ When no ticket is explicitly provided by the user, follow this priority order:
 
 ### No-Ticket Fallback
 
-When no ticket can be identified (by any of the above methods), **get all commits for the entire day** (default: today) and write them under the invented ZZZ ticket file. The date range should cover the full day (`--since YYYY-MM-DD --until YYYY-MM-DD`).
+When no ticket can be identified (by any of the above methods), **get all commits for the entire day** (default: today) and write them under the invented ZZZ ticket file. The date range should cover the full day (`--since YYYY-MM-DDT00:00:00 --until YYYY-MM-DDT00:00:00`).
 
 ## How to Use
 
@@ -42,7 +42,7 @@ When no ticket can be identified (by any of the above methods), **get all commit
 1. **Scan git log** for commits referencing the ticket key (search commit messages, branch names, PR titles):
     ```bash
     git log --all --grep="ABC-123" --pretty=format:"%h %ad %s" --date=short
-    git log --all --oneline --since="2026-05-01" --until="2026-05-05" | grep "ABC-123"
+    git log --all --oneline --since="2026-05-01T00:00:00" --until="2026-05-05T00:00:00" | grep "ABC-123"
     ```
 
 2. **For each identified commit**, gather:
