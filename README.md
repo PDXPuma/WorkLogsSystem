@@ -6,9 +6,9 @@ Automated work logging through shell scripts and Cursor AI skills. Track Jira ti
 
 ```
 WorkChecklists/
-├── worklogs/                    # Per-ticket log files (ABC-123.md, DEF-456.md, etc.)
-├── daily-logs/                  # Aggregated daily logs (2026-05-08.md, etc.)
-├── summaries/                   # Weekly/monthly/quarterly summaries
+├── worklogs/                    # Per-ticket log files (ABC-123.md, DEF-456.md, etc.) — now at ~/WorkLogs/worklogs/
+├── daily-logs/                  # Aggregated daily logs (2026-05-08.md, etc.) — now at ~/WorkLogs/daily-logs/
+├── summaries/                   # Weekly/monthly/quarterly summaries — now at ~/WorkLogs/summaries/
 │   ├── weekly-2026-W19.md
 │   ├── monthly-2026-05.md
 │   └── quarterly-2026-Q2.md
@@ -37,7 +37,7 @@ This:
 - Copies scripts to `~/.local/bin/`
 - Creates `~/.config/worklogs/aliases.zsh` with aliases
 - Adds the source line to `~/.zshrc`
-- Creates `worklogs/`, `daily-logs/`, and `summaries/` directories
+- Creates `~/WorkLogs/worklogs/`, `~/WorkLogs/daily-logs/`, and `~/WorkLogs/summaries/` directories
 
 Then reload your shell:
 
@@ -59,19 +59,19 @@ log-work ABC-123 "Implemented login timeout fix"
 - Navigate to the repo where you worked
 - Ask: "Summarize my work on ABC-123"
 - The repo-summarizer skill scans git log, diffs, and file changes
-- Writes timestamped entries to `worklogs/ABC-123.md`
+- Writes timestamped entries to `~/WorkLogs/worklogs/ABC-123.md`
 
 ### End of Day — Gather Logs
 
 ```bash
-gather-daily              # Gather today's worklogs into daily-logs/2026-05-08.md
+gather-daily              # Gather today's worklogs into ~/WorkLogs/daily-logs/2026-05-08.md
 gather-daily 2026-05-07   # Gather a specific date
 ```
 
 This:
-- Reads all files in `worklogs/`
+- Reads all files in `~/WorkLogs/worklogs/`
 - Pulls only entries for the given date
-- Groups them by ticket in `daily-logs/YYYY-MM-DD.md`
+- Groups them by ticket in `~/WorkLogs/daily-logs/YYYY-MM-DD.md`
 - Only creates sections for tickets that actually have entries that day
 
 ### Add Other Notes
@@ -97,7 +97,7 @@ Ask Cursor AI: "Summarize my work this week"
 Ask Cursor AI: "Summarize my work for April"
 Ask Cursor AI: "Summarize my work this quarter"
 ```
-Summaries are saved to `summaries/weekly-YYYY-WNN.md`, `summaries/monthly-YYYY-MM.md`, or `summaries/quarterly-YYYY-QN.md`.
+Summaries are saved to `~/WorkLogs/summaries/weekly-YYYY-WNN.md`, `~/WorkLogs/summaries/monthly-YYYY-MM.md`, or `~/WorkLogs/summaries/quarterly-YYYY-QN.md`.
 
 ### Query Your Logs
 
@@ -120,7 +120,7 @@ Ask Cursor AI: "What did I work on last week? Save to weekly-summary.md"
 log-work.sh <TICKET> <description>
 log-work ABC-123 "Fixed login timeout issue"
 ```
-Appends a timestamped entry to `worklogs/<TICKET>.md`.
+Appends a timestamped entry to `~/WorkLogs/worklogs/<TICKET>.md`.
 
 ### gather-daily.sh
 ```bash
@@ -128,7 +128,7 @@ gather-daily.sh [YYYY-MM-DD]
 gather-daily                    # defaults to today
 gather-daily 2026-05-07         # specific date
 ```
-Gathers all worklog entries for the given date into `daily-logs/YYYY-MM-DD.md`. Appends to existing files (no duplicates).
+Gathers all worklog entries for the given date into `~/WorkLogs/daily-logs/YYYY-MM-DD.md`. Appends to existing files (no duplicates).
 
 ### add-to-daily.sh
 ```bash
@@ -146,7 +146,7 @@ Scans git history for work on a specific ticket and writes entries to the worklo
 - **Auto-detects** today's date
 - **Override:** "from last Monday" or "from 2026-05-01 to 2026-05-05"
 - **Run from:** Inside the repo directory
-- **Output:** Entries in `worklogs/<TICKET>.md`
+- **Output:** Entries in `~/WorkLogs/worklogs/<TICKET>.md`
 
 ### summarizer
 Summarizes work logs at any granularity.
@@ -155,7 +155,7 @@ Summarizes work logs at any granularity.
 - **Modes:** daily, weekly, monthly, quarterly
 - **Auto-detects** the current time period
 - **Override:** "for April", "this quarter", "week of 2026-05-04"
-- **Output:** Appends to daily log (daily) or `summaries/` (weekly/monthly/quarterly)
+- **Output:** Appends to daily log (daily) or `~/WorkLogs/summaries/` (weekly/monthly/quarterly)
 
 ### querier
 Answer natural language questions about your work logs.

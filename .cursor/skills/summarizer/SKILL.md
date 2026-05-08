@@ -1,6 +1,6 @@
 ---
 name: summarizer
-description: Summarize work logs at any granularity — daily (default), weekly, monthly, or quarterly. Auto-detects the current time period. Writes summaries to daily-logs/ (daily) or summaries/ (weekly/monthly/quarterly).
+description: Summarize work logs at any granularity — daily (default), weekly, monthly, or quarterly. Auto-detects the current time period. Writes summaries to ~/WorkLogs/daily-logs/ (daily) or ~/WorkLogs/summaries/ (weekly/monthly/quarterly).
 ---
 
 # Work Log Summarizer Skill
@@ -42,40 +42,40 @@ Summarize work done across all tracked tickets at any time granularity. By defau
 ## What This Skill Does
 
 ### Daily Summary
-1. Read `daily-logs/YYYY-MM-DD.md` for the target date
+1. Read `~/WorkLogs/daily-logs/YYYY-MM-DD.md` for the target date
 2. Summarize all worklog entries grouped by ticket
 3. Include any "Other Notes" from that day
 4. Write the summary to the "Summary" section of that day's daily log file
 
 ### Weekly Summary
 1. Identify the target week (Monday–Sunday)
-2. Read all `daily-logs/` files for that week
+2. Read all `~/WorkLogs/daily-logs/` files for that week
 3. Aggregate work across all days:
    - Key accomplishments per ticket
    - Time spent patterns
    - Blocked items or blockers
    - Notable themes or context
-4. Save to `summaries/weekly-YYYY-WNN.md` (e.g., `summaries/weekly-2026-W19.md`)
+4. Save to `~/WorkLogs/summaries/weekly-YYYY-WNN.md` (e.g., `~/WorkLogs/summaries/weekly-2026-W19.md`)
 
 ### Monthly Summary
 1. Identify the target month
-2. Read all `daily-logs/` files for that month
+2. Read all `~/WorkLogs/daily-logs/` files for that month
 3. Aggregate work:
    - Major deliverables completed
    - Tickets worked on and their status
    - Key metrics (tickets resolved, hours tracked)
    - Themes and patterns across the month
-4. Save to `summaries/monthly-YYYY-MM.md` (e.g., `summaries/monthly-2026-05.md`)
+4. Save to `~/WorkLogs/summaries/monthly-YYYY-MM.md` (e.g., `~/WorkLogs/summaries/monthly-2026-05.md`)
 
 ### Quarterly Summary
 1. Identify the target quarter (Q1=Jan–Mar, Q2=Apr–Jun, Q3=Jul–Sep, Q4=Oct–Dec)
-2. Read all `daily-logs/` and `summaries/monthly-*/` files for that quarter
+2. Read all `~/WorkLogs/daily-logs/` and `~/WorkLogs/summaries/monthly-*/` files for that quarter
 3. Aggregate work:
    - Major themes and initiatives
    - Key deliverables and outcomes
    - Notable challenges and resolutions
    - Metrics and progress toward goals
-4. Save to `summaries/quarterly-YYYY-QN.md` (e.g., `summaries/quarterly-2026-Q2.md`)
+4. Save to `~/WorkLogs/summaries/quarterly-YYYY-QN.md` (e.g., `~/WorkLogs/summaries/quarterly-2026-Q2.md`)
 
 ## Summary Content Guidelines
 
@@ -95,10 +95,10 @@ For each time period, the summary should include:
 
 ## Output Locations
 
-- **Daily:** Appends to `daily-logs/YYYY-MM-DD.md` in the "Summary" section
-- **Weekly:** `summaries/weekly-YYYY-WNN.md`
-- **Monthly:** `summaries/monthly-YYYY-MM.md`
-- **Quarterly:** `summaries/quarterly-YYYY-QN.md`
+- **Daily:** Appends to `~/WorkLogs/daily-logs/YYYY-MM-DD.md` in the "Summary" section
+- **Weekly:** `~/WorkLogs/summaries/weekly-YYYY-WNN.md`
+- **Monthly:** `~/WorkLogs/summaries/monthly-YYYY-MM.md`
+- **Quarterly:** `~/WorkLogs/summaries/quarterly-YYYY-QN.md`
 
 ## When to Use
 

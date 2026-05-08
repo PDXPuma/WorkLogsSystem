@@ -1,13 +1,13 @@
 ---
 name: querier
-description: Query work logs and daily logs with natural language questions. Answers questions about what you worked on, time spent, ticket status, and more. Outputs to terminal by default, supports --output flag to save to file.
+description: Query work logs and daily logs with natural language questions. Answers questions about what you worked on, time spent, ticket status, and more. Reads from ~/WorkLogs/worklogs/ and ~/WorkLogs/daily-logs/. Outputs to terminal by default, supports --output flag to save to file.
 ---
 
 # Work Log Querier Skill
 
 ## Purpose
 
-Answer natural language questions about your work logs. Reads from `worklogs/` and `daily-logs/` to synthesize answers about your work history.
+Answer natural language questions about your work logs. Reads from `~/WorkLogs/worklogs/` and `~/WorkLogs/daily-logs/` to synthesize answers about your work history.
 
 ## How to Use
 
@@ -34,9 +34,9 @@ Answer natural language questions about your work logs. Reads from `worklogs/` a
    - Any specific tickets, repos, or keywords to filter by
 
 2. **Read the appropriate log files**:
-   - `worklogs/<TICKET>.md` — for ticket-specific queries
-   - `daily-logs/YYYY-MM-DD.md` — for time-period queries
-   - `summaries/` — for pre-computed summaries (weekly/monthly/quarterly)
+    - `~/WorkLogs/worklogs/<TICKET>.md` — for ticket-specific queries
+    - `~/WorkLogs/daily-logs/YYYY-MM-DD.md` — for time-period queries
+    - `~/WorkLogs/summaries/` — for pre-computed summaries (weekly/monthly/quarterly)
 
 3. **Filter and synthesize** the relevant data:
    - Date range filtering

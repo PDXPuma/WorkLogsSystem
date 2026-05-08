@@ -5,9 +5,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-WORKLOG_DIR="$BASE_DIR/worklogs"
+WORKLOG_DIR="$HOME/WorkLogs/worklogs"
 
 # Create worklogs directory if it doesn't exist
 mkdir -p "$WORKLOG_DIR"

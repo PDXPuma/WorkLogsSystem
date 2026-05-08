@@ -5,9 +5,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-DAILYLOG_DIR="$BASE_DIR/daily-logs"
+DAILYLOG_DIR="$HOME/WorkLogs/daily-logs"
 
 # Create daily-logs directory if it doesn't exist
 mkdir -p "$DAILYLOG_DIR"

@@ -55,11 +55,10 @@ else
     echo "  Aliases already sourced in $ZSHRC"
 fi
 
-# 5. Create worklogs and daily-logs directories in the WorkChecklists folder
-WORKCHECKLISTS_DIR="$(cd "$SCRIPT_DIR" && pwd)"
-mkdir -p "$WORKCHECKLISTS_DIR/worklogs"
-mkdir -p "$WORKCHECKLISTS_DIR/daily-logs"
-mkdir -p "$WORKCHECKLISTS_DIR/summaries"
+# 5. Create worklogs, daily-logs, and summaries directories in ~/WorkLogs
+mkdir -p "$HOME/WorkLogs/worklogs"
+mkdir -p "$HOME/WorkLogs/daily-logs"
+mkdir -p "$HOME/WorkLogs/summaries"
 
 echo ""
 echo "Installation complete!"

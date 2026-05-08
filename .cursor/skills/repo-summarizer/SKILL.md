@@ -1,6 +1,6 @@
 ---
 name: repo-summarizer
-description: Scan a git repo for work done on a Jira ticket and write entries to the ticket's worklog file. Auto-detects today's date by default, supports --from and --to for date ranges.
+description: Scan a git repo for work done on a Jira ticket and write entries to ~/WorkLogs/worklogs/<TICKET>.md. Auto-detects today's date by default, supports --from and --to for date ranges.
 ---
 
 # Repo Summarizer Skill
@@ -46,7 +46,7 @@ Scan the current git repository for commits, file changes, and diffs related to 
    - Notable changes or fixes
    - Any blockers or context
 
-4. **Write entries to `worklogs/<TICKET>.md`**:
+4. **Write entries to `~/WorkLogs/worklogs/<TICKET>.md`**:
    ```markdown
    ## [2026-05-08 14:30] Implemented login timeout fix in auth module
    - Modified: src/auth/middleware.py, tests/test_auth.py
@@ -62,7 +62,7 @@ Scan the current git repository for commits, file changes, and diffs related to 
 
 ## Output Location
 
-Entries are appended to: `worklogs/<TICKET>.md` in the WorkChecklists directory.
+Entries are appended to: `~/WorkLogs/worklogs/<TICKET>.md`.
 
 ## When to Use
 
