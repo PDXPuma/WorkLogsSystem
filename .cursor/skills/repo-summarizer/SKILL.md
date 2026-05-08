@@ -9,6 +9,17 @@ description: Scan a git repo for work done on a Jira ticket and write entries to
 
 Scan the current git repository for commits, file changes, and diffs related to a specific Jira ticket, then summarize the work and write timestamped entries to `worklogs/<TICKET>.md`.
 
+## Ticket Detection
+
+When no ticket is explicitly provided by the user, follow this priority order:
+
+1. **Check the current branch name** — if it matches the Jira ticket pattern (`<PREFIX>-<NUMBER>`, e.g. `ABC-123`, `FEAT-42`, `AUTH-7`), use that as the ticket.
+2. **If no ticket found**, invent one starting from `ZZZ-0`, incrementing (`ZZZ-1`, `ZZZ-2`, etc.) as needed. Check `~/WorkLogs/worklogs/` for existing files — skip any ZZZ number that already has a worklog file and continue incrementing until you find one that doesn't exist.
+
+### No-Ticket Fallback
+
+When no ticket can be identified (by any of the above methods), **get all commits for the entire day** (default: today) and write them under the invented ZZZ ticket file. The date range should cover the full day (`--since YYYY-MM-DD --until YYYY-MM-DD`).
+
 ## How to Use
 
 1. **Navigate to the repo** where the work was done:
