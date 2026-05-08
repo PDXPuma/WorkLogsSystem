@@ -26,22 +26,46 @@ if [ ! -d "$WORKLOG_DIR" ] || [ -z "$(ls -A "$WORKLOG_DIR" 2>/dev/null)" ]; then
     exit 0
 fi
 
-# Find all tickets that have entries for this date
-echo "Gathering worklogs for $GATHER_DATE..."
+# Save Other Notes and Summary from existing daily log (if any)
+saved_notes=""
+saved_summary=""
+if [ -f "$DAILYLOG_FILE" ]; then
+    in_notes=0
+    in_summary=0
+    while IFS= read -r line; do
+        if [[ "$line" == "## Other Notes" ]]; then
+            in_notes=1
+            in_summary=0
+            continue
+        elif [[ "$line" == "## Summary" ]]; then
+            in_notes=0
+            in_summary=1
+            continue
+        elif [[ "$line" =~ ^##\  ]]; then
+            in_notes=0
+            in_summary=0
+        fi
+
+        if [ "$in_notes" -eq 1 ] && [[ -n "$line" ]]; then
+            saved_notes="$saved_notes$line"$'\n'
+        elif [ "$in_summary" -eq 1 ]; then
+            saved_summary="$saved_summary$line"$'\n'
+        fi
+    done < "$DAILYLOG_FILE"
+fi
 
 # Collect ticket entries
 declare -A TICKET_ENTRIES
 
 for worklog in "$WORKLOG_DIR"/*.md; do
     [ -f "$worklog" ] || continue
-    
+
     ticket_name="$(basename "$worklog" .md)"
-    
+
     # Extract only entries for this date
     entries=""
     in_section=0
     while IFS= read -r line; do
-        # Check if this is a section header (## [...])
         date_pattern='^## \[([0-9]{4}-[0-9]{2}-[0-9]{2})'
         if [[ "$line" =~ $date_pattern ]]; then
             entry_date="${BASH_REMATCH[1]}"
@@ -52,81 +76,76 @@ for worklog in "$WORKLOG_DIR"/*.md; do
                 in_section=0
             fi
         elif [ "$in_section" -eq 1 ]; then
-            # Continue collecting until next section or blank line
             if [[ -z "$line" ]]; then
-                # Blank line ends this entry block
                 in_section=0
             else
                 entries="$entries$line"$'\n'
             fi
         fi
     done < "$worklog"
-    
-    # Only include tickets that have entries for this date
+
     if [ -n "$entries" ]; then
         TICKET_ENTRIES["$ticket_name"]="$entries"
     fi
 done
 
-# If no entries found for this date, exit quietly
+# If no entries found for this date
 if [ ${#TICKET_ENTRIES[@]} -eq 0 ]; then
     echo "No worklog entries found for $GATHER_DATE"
-    # Create empty daily log with sections
     if [ ! -f "$DAILYLOG_FILE" ]; then
-        echo "# Daily Log: $GATHER_DATE" > "$DAILYLOG_FILE"
-        echo "" >> "$DAILYLOG_FILE"
-        echo "## Worklog Entries" >> "$DAILYLOG_FILE"
-        echo "" >> "$DAILYLOG_FILE"
-        echo "No entries for this date." >> "$DAILYLOG_FILE"
-        echo "" >> "$DAILYLOG_FILE"
-        echo "## Other Notes" >> "$DAILYLOG_FILE"
-        echo "" >> "$DAILYLOG_FILE"
-        echo "## Summary" >> "$DAILYLOG_FILE"
-        echo "" >> "$DAILYLOG_FILE"
+        {
+            echo "# Daily Log: $GATHER_DATE"
+            echo ""
+            echo "## Worklog Entries"
+            echo ""
+            echo "No entries for this date."
+            echo ""
+            echo "## Other Notes"
+            echo ""
+            if [ -n "$saved_notes" ]; then
+                echo -n "$saved_notes"
+            fi
+            echo "## Summary"
+            echo ""
+            if [ -n "$saved_summary" ]; then
+                echo -n "$saved_summary"
+            fi
+        } > "$DAILYLOG_FILE"
     fi
     echo "Created empty daily log: $DAILYLOG_FILE"
     exit 0
 fi
 
-# Create daily log file if it doesn't exist
-if [ ! -f "$DAILYLOG_FILE" ]; then
-    echo "# Daily Log: $GATHER_DATE" > "$DAILYLOG_FILE"
-    echo "" >> "$DAILYLOG_FILE"
-    echo "## Worklog Entries" >> "$DAILYLOG_FILE"
-    echo "" >> "$DAILYLOG_FILE"
-    echo "## Other Notes" >> "$DAILYLOG_FILE"
-    echo "" >> "$DAILYLOG_FILE"
-    echo "## Summary" >> "$DAILYLOG_FILE"
-    echo "" >> "$DAILYLOG_FILE"
-fi
+# Rebuild the daily log from scratch
+echo "Gathering worklogs for $GATHER_DATE..."
 
-# Check if worklog entries section already exists with content
-if grep -q "No entries for this date" "$DAILYLOG_FILE" 2>/dev/null; then
-    # Replace the placeholder text
-    sed -i '/No entries for this date./d' "$DAILYLOG_FILE"
-fi
+{
+    echo "# Daily Log: $GATHER_DATE"
+    echo ""
+    echo "## Worklog Entries"
+    echo ""
 
-# Append entries for each ticket that has work for this date
-# Check if we need to add a blank line before the first ticket section
-if ! grep -q "^## \[" "$DAILYLOG_FILE" 2>/dev/null; then
-    : # No ticket sections exist yet, will add them
-fi
+    for ticket in $(echo "${!TICKET_ENTRIES[@]}" | tr ' ' '\n' | sort); do
+        entries="${TICKET_ENTRIES[$ticket]}"
+        echo "## [$GATHER_DATE] $ticket"
+        echo ""
+        echo -n "$entries"
+        echo ""
+        echo "  $ticket: entries added" >&2
+    done
 
-for ticket in $(echo "${!TICKET_ENTRIES[@]}" | tr ' ' '\n' | sort); do
-    entries="${TICKET_ENTRIES[$ticket]}"
-    
-    # Check if this ticket's section already exists in the daily log for this date
-    if grep -q "^## \[$GATHER_DATE\].*$ticket" "$DAILYLOG_FILE" 2>/dev/null; then
-        echo "  $ticket: already in daily log, skipping"
-        continue
+    echo "## Other Notes"
+    echo ""
+    if [ -n "$saved_notes" ]; then
+        echo -n "$saved_notes"
     fi
-    
-    # Append the ticket section
-    echo "## [$GATHER_DATE] $ticket" >> "$DAILYLOG_FILE"
-    echo "" >> "$DAILYLOG_FILE"
-    echo -n "$entries" >> "$DAILYLOG_FILE"
-    echo "" >> "$DAILYLOG_FILE"
-    echo "  $ticket: entries added"
-done
 
-echo "Daily log updated: $DAILYLOG_FILE"
+    echo "## Summary"
+    echo ""
+    if [ -n "$saved_summary" ]; then
+        # Strip leading blank lines from saved summary
+        echo "$saved_summary" | sed '/./,$!d'
+    fi
+} > "$DAILYLOG_FILE"
+
+echo "Daily log rebuilt: $DAILYLOG_FILE"
